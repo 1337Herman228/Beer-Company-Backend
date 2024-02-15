@@ -10,11 +10,18 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long userId;
 
     @Column(unique = true)
     private String login;
 
     private String password;
-    private String roles;
+
+    @OneToOne
+    @JoinColumn(name = "roleId")
+    private Roles roles;
+
+    @OneToOne
+    @JoinColumn(name = "personId")
+    private Person person;
 }

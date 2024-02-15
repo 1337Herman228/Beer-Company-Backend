@@ -18,7 +18,7 @@ public class MyUserDetails implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRoles().split(", "))
+        return Arrays.stream(user.getRoles().getPosition().split(", "))// Возможно нужно будет убрать ',' если не нужно указывать сразу несколько ролей
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

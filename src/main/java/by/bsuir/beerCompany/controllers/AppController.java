@@ -1,5 +1,6 @@
 package by.bsuir.beerCompany.controllers;
 
+import by.bsuir.beerCompany.dao.NewUserDao;
 import by.bsuir.beerCompany.entity.Users;
 import by.bsuir.beerCompany.services.AddUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class AppController {
     }
 
     @PostMapping("/new-user")
-    public String addUser(@RequestBody Users user) {
-        addNewUser.addUser(user);
+    public String addUser(@RequestBody NewUserDao newUser) {
+        addNewUser.addUser(newUser);
         return "User added";
     }
 
