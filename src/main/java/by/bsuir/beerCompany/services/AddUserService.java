@@ -21,6 +21,19 @@ public class AddUserService {
 
     private PasswordEncoder passwordEncoder;
 
+// How to add new user with Postman
+
+//    localhost:8080/api/v1/apps/new-user
+//    {
+//            "login": "user",
+//            "password": "user",
+//            "name": "name",
+//            "surname": "surname",
+//            "phone": "phone",
+//            "email": "email"
+//    }
+
+
     public void addUser(NewUserDao newUser){
 
         Roles role = new Roles();
