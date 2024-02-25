@@ -1,4 +1,11 @@
 spring:
+  flyway:
+    locations: classpath:db.migration
+    url: jdbc:postgresql://localhost:5432/beerdb
+    user: postgres
+    password: password
+    baseline-on-migrate: true
+#    enabled: false
   datasource:
     url: jdbc:postgresql://localhost:5432/beerdb
     username: postgres
@@ -6,7 +13,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+#      ddl-auto: update
 #      ddl-auto: create-drop
-
+      ddl-auto: validate
 #    show-sql: true

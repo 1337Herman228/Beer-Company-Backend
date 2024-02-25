@@ -17,7 +17,8 @@ public class Users {
 
     private String password;
 
-    @OneToOne
+//    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "roleId")
     private Roles roles;
 

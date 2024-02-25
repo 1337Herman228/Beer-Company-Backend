@@ -30,12 +30,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( auth -> auth
+                        .requestMatchers("/admin/roles").permitAll()
                         .requestMatchers("/api/v1/apps/welcome", "/api/v1/apps/new-user").permitAll()
                         .requestMatchers("/api/v1/apps/**").authenticated())
 
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .loginProcessingUrl("/process-login")
+//                        .defaultSuccessUrl("/home")
+//                        .failureUrl("/login?error=true")
+//                        .permitAll()
+//                )
                 .build();
     }
 

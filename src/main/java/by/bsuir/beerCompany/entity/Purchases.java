@@ -18,7 +18,8 @@ public class Purchases {
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItem> items = new ArrayList<>();
 
-    @OneToOne
+//    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
 
