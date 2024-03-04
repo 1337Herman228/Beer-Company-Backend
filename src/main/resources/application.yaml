@@ -17,3 +17,9 @@ spring:
 #      ddl-auto: create-drop
       ddl-auto: validate
 #    show-sql: true
+
+jwt:
+  secret:
+    key: "439adb87583df62d6ef6ba54faf42945c9ca704f7069f975898d1f7210ad05f6"
+  expiration: 24h
+

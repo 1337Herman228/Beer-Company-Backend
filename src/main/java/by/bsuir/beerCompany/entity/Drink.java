@@ -20,5 +20,5 @@ public class Drink {
     @Column(length = 1000)
     private String compound;
 
-    private byte[] image;
+    private String image;
 }

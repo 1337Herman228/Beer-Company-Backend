@@ -1,11 +1,14 @@
 package by.bsuir.beerCompany.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
 @Table(name = "users")
+@Accessors(chain = true)
 public class Users {
 
     @Id
@@ -17,7 +20,6 @@ public class Users {
 
     private String password;
 
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name = "roleId")
     private Roles roles;
@@ -25,4 +27,5 @@ public class Users {
     @OneToOne
     @JoinColumn(name = "personId")
     private Person person;
+
 }

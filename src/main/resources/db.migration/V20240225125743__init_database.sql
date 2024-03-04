@@ -57,7 +57,7 @@ create table drink
     compound          varchar(1000),
     description       varchar(1000),
     drink_name        varchar(255),
-    image             bytea,
+    image             varchar(255),
     primary key (drink_id)
 );
 create table person
@@ -129,4 +129,4 @@ alter table if exists purchases
 alter table if exists users
     add constraint FKd21kkcigxa21xuby5i3va9ncs foreign key (person_id) references person;
 alter table if exists users
-    add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles;
+    add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles
