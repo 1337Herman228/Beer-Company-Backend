@@ -1,9 +1,6 @@
 package by.bsuir.beerCompany.services;
 
-import by.bsuir.beerCompany.dao.AccountDao;
-import by.bsuir.beerCompany.dao.CategoryDao;
-import by.bsuir.beerCompany.dao.NewRoleDao;
-import by.bsuir.beerCompany.dao.NewUserDao;
+import by.bsuir.beerCompany.dao.*;
 import by.bsuir.beerCompany.entity.*;
 import by.bsuir.beerCompany.repo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -87,6 +85,7 @@ public class AddUserService {
         return false;
     }
 
+
     public boolean addCategory(String requestBody) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         CategoryDao newCategoryObj = objectMapper.readValue(requestBody, CategoryDao.class);
@@ -97,6 +96,42 @@ public class AddUserService {
             category.setCategoryName(newCategoryObj.getCategoryName());
             category.setCategoryDescription(newCategoryObj.getCategoryDescription());
             categoryRepository.save(category);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addDrink(String requestBody) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        DrinkDao newDrinkObj = objectMapper.readValue(requestBody, DrinkDao.class);
+        try{
+            drinkRepository.findByDrinkName(newDrinkObj.getDrinkName()).orElseThrow();
+        }catch (Exception e){
+            Drink drink = new Drink();
+            drink.setDrinkName(newDrinkObj.getDrinkName());
+            drink.setShortDescription(newDrinkObj.getShortDescription());
+            drink.setDescription(newDrinkObj.getDescription());
+            drink.setCompound(newDrinkObj.getCompound());
+            drink.setImage(newDrinkObj.getImage());
+            drinkRepository.save(drink);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addProduct(String requestBody) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductDao newProductObj = objectMapper.readValue(requestBody, ProductDao.class);
+        try{
+            productRepository.findByDrink(drinkRepository.findById(newProductObj.getDrinkId()).orElseThrow()).orElseThrow();
+        }catch (Exception e){
+            Product product = new Product();
+            product.setDrink(drinkRepository.findById(newProductObj.getDrinkId()).orElseThrow());
+            product.setCategory(categoryRepository.findById(newProductObj.getCategoryId()).orElseThrow());
+            product.setPossibleVolume(newProductObj.getVolume());
+            product.setPrice(newProductObj.getPrice());
+            product.setQuantityLeft(newProductObj.getQuantity());
+            productRepository.save(product);
             return true;
         }
         return false;
@@ -151,6 +186,18 @@ public class AddUserService {
         personRepository.delete(person);
     }
 
+    public void deleteDrink(Long drinkID){
+        Drink drink = drinkRepository.findById(drinkID).orElseThrow();
+        Optional<Product> product = productRepository.findByDrink(drink);
+        product.ifPresent(value -> productRepository.delete(value));
+        drinkRepository.delete(drink);
+    }
+
+    public void deleteProduct(Long productID){
+        Product product = productRepository.findById(productID).orElseThrow();
+        productRepository.delete(product);
+    }
+
     public void deleteCategory(Long categoryID){
         List<Product> products = productRepository.findAll();
         for (Product product : products) {
@@ -200,6 +247,38 @@ public class AddUserService {
         category.setCategoryName(categoryObj.getCategoryName());
         category.setCategoryDescription(categoryObj.getCategoryDescription());
         categoryRepository.save(category);
+    }
+
+    public void editDrink(String requestBody, Long drinkID) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        DrinkDao drinkObj = objectMapper.readValue(requestBody, DrinkDao.class);
+        Drink drink = drinkRepository.findById(drinkID).orElseThrow();
+        drink.setDrinkName(drinkObj.getDrinkName());
+        drink.setDescription(drinkObj.getDescription());
+        drink.setShortDescription(drinkObj.getShortDescription());
+        drink.setCompound(drinkObj.getCompound());
+        drink.setImage(drinkObj.getImage());
+        drinkRepository.save(drink);
+    }
+
+    public boolean editProduct(String requestBody, Long productID) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductDao productObj = objectMapper.readValue(requestBody, ProductDao.class);
+
+        List<Product> products = productRepository.findAll();
+        for (Product product : products) {
+            if (product.getDrink().getDrinkId() == productObj.getDrinkId() && product.getProductId() != productID) {
+                return false;
+            }
+        }
+        Product product = productRepository.findById(productID).orElseThrow();
+        product.setDrink(drinkRepository.findById(productObj.getDrinkId()).orElseThrow());
+        product.setCategory(categoryRepository.findById(productObj.getCategoryId()).orElseThrow());
+        product.setPossibleVolume(productObj.getVolume());
+        product.setPrice(productObj.getPrice());
+        product.setQuantityLeft(productObj.getQuantity());
+        productRepository.save(product);
+        return true;
     }
 
     public void editAccount(String requestBody, Long userID) throws JsonProcessingException {

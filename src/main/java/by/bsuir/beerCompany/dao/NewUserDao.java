@@ -7,7 +7,7 @@ import lombok.Data;
 public class NewUserDao {
     private String login;
     private String password;
-    private final String position = "ROLE_USER";
+    private final String position = "Пользователь";
     private String name;
     private String surname;
     private String phone;

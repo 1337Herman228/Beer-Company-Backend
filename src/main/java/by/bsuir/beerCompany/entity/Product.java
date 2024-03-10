@@ -22,8 +22,8 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    private float price;
-    private int quantityLeft;
+    private String price;
+    private String quantityLeft;
     private String possibleVolume;
 
 }

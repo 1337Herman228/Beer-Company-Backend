@@ -2,6 +2,7 @@ package by.bsuir.beerCompany.services.impl;
 
 import by.bsuir.beerCompany.dao.AuthenticationRequest;
 import by.bsuir.beerCompany.dao.AuthenticationResponse;
+import by.bsuir.beerCompany.dao.NewUserDao;
 import by.bsuir.beerCompany.dao.RegistrationRequest;
 import by.bsuir.beerCompany.entity.Person;
 import by.bsuir.beerCompany.entity.Roles;
@@ -39,26 +40,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthenticationResponse register(RegistrationRequest registrationRequest) {
-        String login = registrationRequest.login();
+    public AuthenticationResponse register(NewUserDao newUser) {
+        String login = newUser.getLogin();
 
         if (userRepository.findByLogin(login).isPresent()) {
             throw new RuntimeException("User with login: %s already exists".formatted(login));
         }
 
-        // поменять
         Person person = new Person();
-        person.setName("name");
-        person.setSurname("surname");
-        person.setPhone("phone");
-        person.setEmail("email");
+        person.setName(newUser.getName());
+        person.setSurname(newUser.getSurname());
+        person.setPhone(newUser.getPhone());
+        person.setEmail(newUser.getEmail());
         personRepository.save(person);
-        ///
 
         Roles role = rolesRepository.findByPosition("Пользователь").orElseThrow();
         Users user = new Users()
                 .setLogin(login)
-                .setPassword(passwordEncoder.encode(registrationRequest.password()))
+                .setPassword(passwordEncoder.encode(newUser.getPassword()))
 //                .setName(registrationRequest.name())
                 .setRoles(role)
                 .setPerson(person);

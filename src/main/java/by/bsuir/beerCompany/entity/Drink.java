@@ -13,12 +13,12 @@ public class Drink {
     private Long drinkId;
 
     private String drinkName;
-    @Column(length = 300)
+    @Column(length = 1000)
     private String shortDescription;
     @Column(length = 1000)
     private String description;
     @Column(length = 1000)
     private String compound;
-
+    @Column(length = 25000)
     private String image;
 }
