@@ -45,29 +45,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**", "POST")).permitAll()
-                        .requestMatchers("/admin/roles").permitAll()
-                        .requestMatchers("/admin/drinks").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/auth/authenticate").permitAll()
-                        .requestMatchers(
-                                "/api/v1/apps/welcome",
-                                "/api/v1/apps/new-user",
-                                "/admin/**"
-                                )
-                        .permitAll()
-                        .requestMatchers("/api/v1/apps/**").authenticated())
-
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(configurer -> configurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .cors(Customizer.withDefaults())
                 .build();
     }
 

@@ -28,40 +28,6 @@ public class AddUserService {
 
     private PasswordEncoder passwordEncoder;
 
-// How to add new user with Postman
-
-//    localhost:8080/api/v1/apps/new-user
-//    {
-//            "login": "user",
-//            "password": "user",
-//            "name": "name",
-//            "surname": "surname",
-//            "phone": "phone",
-//            "email": "email"
-//    }
-
-
-    public void addUser(NewUserDao newUser){
-
-        Roles role = new Roles();
-        role.setPosition(newUser.getPosition());
-        rolesRepository.save(role);
-
-        Person person = new Person();
-        person.setName(newUser.getName());
-        person.setSurname(newUser.getSurname());
-        person.setPhone(newUser.getPhone());
-        person.setEmail(newUser.getEmail());
-        personRepository.save(person);
-
-        Users user = new Users();
-        user.setLogin(newUser.getLogin());
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setRoles(role);
-        user.setPerson(person);
-        userRepository.save(user);
-    }
-
     public boolean addAccount(String requestBody) throws JsonProcessingException{
         ObjectMapper objectMapper = new ObjectMapper();
         AccountDao accObj = objectMapper.readValue(requestBody, AccountDao.class);

@@ -9,17 +9,18 @@ import by.bsuir.beerCompany.services.JSONConvertingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/admin")
+@PreAuthorize("hasAuthority('Администратор')")
 public class AdminPagesController {
 
     @Autowired
     JSONConvertingService jsonConvertingService;
-
     @Autowired
     RolesRepository rolesRepository;
     @Autowired
@@ -36,97 +37,81 @@ public class AdminPagesController {
     ProductRepository productRepository;
 
     @GetMapping("/roles")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String roles() {
         return jsonConvertingService.convertObjectToJson(rolesRepository.findAll());
     }
 
     @GetMapping("/accounts")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String accounts() {
         return jsonConvertingService.convertObjectToJson(userService.getAccounts());
     }
 
     @GetMapping("/categories")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String categories() {
         return jsonConvertingService.convertObjectToJson(categoryRepository.findAll());
     }
 
     @GetMapping("/drinks")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String drinks() {
         return jsonConvertingService.convertObjectToJson(drinkRepository.findAll());
     }
 
     @GetMapping("/products")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String products() {
         return jsonConvertingService.convertObjectToJson(productRepository.findAll());
     }
 
     @GetMapping("/role/{roleID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getRoleByID( @PathVariable Long roleID) {
         return jsonConvertingService.convertObjectToJson(rolesRepository.findById(roleID).orElseThrow());
     }
 
     @GetMapping("/account/{userID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getAccountByID( @PathVariable Long userID) {
         AccountDao account =  userService.getAccount(userID);
         return jsonConvertingService.convertObjectToJson(account);
     }
 
     @GetMapping("/category/{categoryID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getCategoryByID( @PathVariable Long categoryID) {
         return jsonConvertingService.convertObjectToJson(categoryRepository.findById(categoryID).orElseThrow());
     }
 
     @GetMapping("/drink/{drinkID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getDrinkByID( @PathVariable Long drinkID) {
         return jsonConvertingService.convertObjectToJson(drinkRepository.findById(drinkID).orElseThrow());
     }
 
     @GetMapping("/product/{productID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getProductByID( @PathVariable Long productID) {
         return jsonConvertingService.convertObjectToJson(productRepository.findById(productID).orElseThrow());
     }
 
-    //    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/del-role/{roleID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")   
     public String deleteRole( @PathVariable Long roleID) {
         userService.deleteRole(roleID);
         return jsonConvertingService.convertObjectToJson(rolesRepository.findAll());
     }
 
     @PostMapping("/del-account/{userID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteAccount( @PathVariable Long userID) {
         userService.deleteAccount(userID);
         return jsonConvertingService.convertObjectToJson(userService.getAccounts());
     }
 
     @PostMapping("/del-category/{categoryID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteCategory( @PathVariable Long categoryID) {
         userService.deleteCategory(categoryID);
         return jsonConvertingService.convertObjectToJson(categoryRepository.findAll());
     }
 
     @PostMapping("/del-drink/{drinkID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteDrink( @PathVariable Long drinkID) {
         userService.deleteDrink(drinkID);
         return jsonConvertingService.convertObjectToJson(drinkRepository.findAll());
     }
 
     @PostMapping("/del-product/{productID}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteProduct( @PathVariable Long productID) {
         userService.deleteProduct(productID);
         return jsonConvertingService.convertObjectToJson(productRepository.findAll());
@@ -180,8 +165,9 @@ public class AdminPagesController {
         return ResponseEntity.ok("Request body received");
     }
 
-    @PostMapping("/edit-drink/{drinkID}")
+        @PostMapping("/edit-drink/{drinkID}")
     public ResponseEntity<String> editDrink(@PathVariable Long drinkID,@RequestBody String requestBody) throws JsonProcessingException {
+        System.out.println(requestBody);
         userService.editDrink(requestBody, drinkID);
         return ResponseEntity.ok("Request body received");
     }
