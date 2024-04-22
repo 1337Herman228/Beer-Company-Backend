@@ -37,4 +37,14 @@ public class CartController {
         List<PurchaseItem> purchaseItems = cartService.getPurchaseItemsFromCart(userId);
         return jsonConvertingService.convertObjectToJson(purchaseItems);
     }
+
+    @PostMapping("/make-purchase")
+    public String makePurchase(@RequestBody String requestBody) throws JsonProcessingException {
+        try{
+            cartService.makeNewPurchase(requestBody);
+            return jsonConvertingService.convertObjectToJson("ok");
+        }catch (Exception e){
+            return jsonConvertingService.convertObjectToJson("error");
+        }
+    }
 }

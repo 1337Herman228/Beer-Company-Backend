@@ -3,38 +3,35 @@ package by.bsuir.beerCompany.controllers;
 
 import by.bsuir.beerCompany.dao.AccountDao;
 import by.bsuir.beerCompany.dao.CategoryDao;
+import by.bsuir.beerCompany.dao.PurchaseDto;
 import by.bsuir.beerCompany.repo.*;
 import by.bsuir.beerCompany.services.AddUserService;
 import by.bsuir.beerCompany.services.JSONConvertingService;
+import by.bsuir.beerCompany.services.PurchasesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('Администратор')")
+@RequiredArgsConstructor
 public class AdminPagesController {
 
-    @Autowired
-    JSONConvertingService jsonConvertingService;
-    @Autowired
-    RolesRepository rolesRepository;
-    @Autowired
-    PersonRepository personRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AddUserService userService;
-    @Autowired
-    CategoryRepository categoryRepository;
-    @Autowired
-    DrinkRepository drinkRepository;
-    @Autowired
-    ProductRepository productRepository;
+    private final JSONConvertingService jsonConvertingService;
+    private final RolesRepository rolesRepository;
+    private final AddUserService userService;
+    private final CategoryRepository categoryRepository;
+    private final DrinkRepository drinkRepository;
+    private final ProductRepository productRepository;
+    private final PurchasesService purchasesService;
 
     @GetMapping("/roles")
     public String roles() {
@@ -60,6 +57,13 @@ public class AdminPagesController {
     public String products() {
         return jsonConvertingService.convertObjectToJson(productRepository.findAll());
     }
+
+    @GetMapping("/purchases")
+    public String purchases() {
+        List<PurchaseDto> purchasesDto = purchasesService.getAllPurchases();
+        return jsonConvertingService.convertObjectToJson(purchasesDto);
+    }
+
 
     @GetMapping("/role/{roleID}")
     public String getRoleByID( @PathVariable Long roleID) {
@@ -115,6 +119,12 @@ public class AdminPagesController {
     public String deleteProduct( @PathVariable Long productID) {
         userService.deleteProduct(productID);
         return jsonConvertingService.convertObjectToJson(productRepository.findAll());
+    }
+
+    @PostMapping("/del-purchase/{purchaseID}")
+    public ResponseEntity<String> deletePurchase(@PathVariable Long purchaseID) {
+        purchasesService.deletePurchase(purchaseID);
+        return ResponseEntity.ok("Ok");
     }
 
     @PostMapping("/add-new-role")

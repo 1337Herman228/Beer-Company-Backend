@@ -53,9 +53,9 @@ create table category
 create table drink
 (
     drink_id          bigint not null,
-    short_description varchar(300),
     compound          varchar(1000),
     description       varchar(1000),
+    short_description varchar(1000),
     image             varchar(25000),
     drink_name        varchar(255),
     primary key (drink_id)
@@ -71,12 +71,12 @@ create table person
 );
 create table product
 (
-    price           float4  not null,
-    quantity_left   integer not null,
     category_id     bigint,
     drink_id        bigint,
-    product_id      bigint  not null,
-    possible_volume varchar(255),
+    product_id      bigint not null,
+    possible_volume varchar(455),
+    price           varchar(455),
+    quantity_left   varchar(455),
     primary key (product_id)
 );
 create table purchase_item
@@ -94,7 +94,9 @@ create table purchases
     date        timestamp(6),
     purchase_id bigserial not null,
     user_id     bigint,
-    destination varchar(255),
+    destination varchar(5000),
+    payment     varchar(255),
+    final_price float4,
     primary key (purchase_id)
 );
 create table roles
@@ -129,4 +131,4 @@ alter table if exists purchases
 alter table if exists users
     add constraint FKd21kkcigxa21xuby5i3va9ncs foreign key (person_id) references person;
 alter table if exists users
-    add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles;
+    add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles

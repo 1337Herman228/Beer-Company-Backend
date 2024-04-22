@@ -1,7 +1,5 @@
 package by.bsuir.beerCompany.services;
 
-import by.bsuir.beerCompany.entity.Users;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 

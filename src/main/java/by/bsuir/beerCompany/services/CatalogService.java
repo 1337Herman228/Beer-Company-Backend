@@ -58,6 +58,7 @@ public class CatalogService {
             Arrays.stream(price).map(Float::parseFloat).forEach(allPrices::add);
         }
         allPrices.sort(Float::compareTo);
+//        System.out.println(allPrices);
         List<Float> minMaxPrices = new ArrayList<>();
         minMaxPrices.add(allPrices.get(0));
         minMaxPrices.add(allPrices.get(allPrices.size()-1));

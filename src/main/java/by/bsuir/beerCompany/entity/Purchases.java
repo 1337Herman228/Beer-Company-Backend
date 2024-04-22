@@ -3,6 +3,8 @@ package by.bsuir.beerCompany.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,15 +17,18 @@ public class Purchases {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long purchaseId;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseItem> items = new ArrayList<>();
+//    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<PurchaseItem> items = new ArrayList<>();
 
 //    @OneToOne
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
 
-    private Date date = new Date();
+    private Date date;
+    @Column(length = 5000)
     private String destination;
+    private String payment;
+    private float finalPrice;
 
 }
