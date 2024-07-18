@@ -12,12 +12,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name = "drinkId")
     private Drink drink;
 
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;

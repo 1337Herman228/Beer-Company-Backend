@@ -17,10 +17,6 @@ public class Purchases {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long purchaseId;
 
-//    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<PurchaseItem> items = new ArrayList<>();
-
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;

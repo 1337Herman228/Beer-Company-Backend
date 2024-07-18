@@ -15,7 +15,6 @@ public class PurchaseItem {
     @JoinColumn(name = "purchaseId")
     private Purchases purchase;
 
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;

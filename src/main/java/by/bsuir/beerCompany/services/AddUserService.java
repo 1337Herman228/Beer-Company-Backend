@@ -2,6 +2,7 @@ package by.bsuir.beerCompany.services;
 
 import by.bsuir.beerCompany.dao.*;
 import by.bsuir.beerCompany.entity.*;
+import by.bsuir.beerCompany.mappers.*;
 import by.bsuir.beerCompany.repo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,16 +35,12 @@ public class AddUserService {
         try{
             userRepository.findByLogin(accObj.getLogin()).orElseThrow();
         }catch (Exception e){
-            Person person = new Person();
-            person.setName(accObj.getName());
-            person.setSurname(accObj.getSurname());
-            person.setPhone(accObj.getPhone());
-            person.setEmail(accObj.getEmail());
-            Users user = new Users();
-            user.setLogin(accObj.getLogin());
-            user.setPassword(passwordEncoder.encode(accObj.getPassword()));
-            user.setPerson(person);
+            Person person = PersonMapper.INSTANCE.toEntity(accObj);
+
+            Users user = UserMapper.INSTANCE.toEntity(accObj);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(rolesRepository.findByPosition(accObj.getPosition()).orElseThrow());
+
             personRepository.save(person);
             userRepository.save(user);
             return true;
@@ -58,9 +55,7 @@ public class AddUserService {
         try{
             categoryRepository.findByCategoryName(newCategoryObj.getCategoryName()).orElseThrow();
         }catch (Exception e){
-            Category category = new Category();
-            category.setCategoryName(newCategoryObj.getCategoryName());
-            category.setCategoryDescription(newCategoryObj.getCategoryDescription());
+            Category category = CategoryMapper.INSTANCE.toEntity(newCategoryObj);
             categoryRepository.save(category);
             return true;
         }
@@ -73,12 +68,7 @@ public class AddUserService {
         try{
             drinkRepository.findByDrinkName(newDrinkObj.getDrinkName()).orElseThrow();
         }catch (Exception e){
-            Drink drink = new Drink();
-            drink.setDrinkName(newDrinkObj.getDrinkName());
-            drink.setShortDescription(newDrinkObj.getShortDescription());
-            drink.setDescription(newDrinkObj.getDescription());
-            drink.setCompound(newDrinkObj.getCompound());
-            drink.setImage(newDrinkObj.getImage());
+            Drink drink = DrinkMapper.INSTANCE.toEntity(newDrinkObj);
             drinkRepository.save(drink);
             return true;
         }
@@ -91,12 +81,11 @@ public class AddUserService {
         try{
             productRepository.findByDrink(drinkRepository.findById(newProductObj.getDrinkId()).orElseThrow()).orElseThrow();
         }catch (Exception e){
-            Product product = new Product();
+
+            Product product = ProductMapper.INSTANCE.toEntity(newProductObj);
             product.setDrink(drinkRepository.findById(newProductObj.getDrinkId()).orElseThrow());
             product.setCategory(categoryRepository.findById(newProductObj.getCategoryId()).orElseThrow());
-            product.setPossibleVolume(newProductObj.getVolume());
-            product.setPrice(newProductObj.getPrice());
-            product.setQuantityLeft(newProductObj.getQuantity());
+
             productRepository.save(product);
             return true;
         }

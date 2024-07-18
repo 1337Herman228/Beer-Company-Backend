@@ -58,7 +58,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Users user = new Users()
                 .setLogin(login)
                 .setPassword(passwordEncoder.encode(newUser.getPassword()))
-//                .setName(registrationRequest.name())
                 .setRoles(role)
                 .setPerson(person);
         userRepository.save(user);
@@ -67,7 +66,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-//    @Transactional(readOnly = true)
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

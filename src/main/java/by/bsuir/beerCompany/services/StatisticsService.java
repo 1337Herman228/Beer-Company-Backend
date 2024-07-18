@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class StatisticsService {
 
-    private final PurchaseRepository purchaseRepository;
     private final PurchaseItemRepository purchaseItemRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;

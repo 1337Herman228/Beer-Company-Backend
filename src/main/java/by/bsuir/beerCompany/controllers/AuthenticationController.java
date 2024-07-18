@@ -33,7 +33,6 @@ public class AuthenticationController {
         catch (Exception e){
             return new AuthenticationResponse("user already exists");
         }
-
     }
 
     @PostMapping("/authenticate")

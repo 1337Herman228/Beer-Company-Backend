@@ -34,7 +34,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//    private final UserDetailsService userDetailsService;
 
     @Bean
     public UserDetailsService userDetailsService() {
